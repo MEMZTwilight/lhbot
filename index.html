@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TG机器人管理</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>六花bot</h1>
+        <img src="z.jpg" class="avatar" alt="机器人头像">
+    </header>
+
+    <div class="container">
+        <!-- 统计卡片 -->
+        <div class="stats-card">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value" id="totalMembers">0</span>
+                    <span class="stat-label">总成员数</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="bannedToday">0</span>
+                    <span class="stat-label">今日踢出</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="activeUsers">0</span>
+                    <span class="stat-label">活跃用户</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 操作记录 -->
+        <div class="log-card">
+            <h2>最近操作记录</h2>
+            <div class="log-list" id="actionLogs"></div>
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <nav class="bottom-nav">
+        <button class="nav-btn" onclick="refreshData()">刷新数据</button>
+        <button class="nav-btn" onclick="clearLocalData()">清空记录</button>
+    </nav>
+
+    <script>
+        // 初始化本地存储
+        let actionLogs = JSON.parse(localStorage.getItem('actionLogs') || '[]');
+        
+        // 初始化统计数字
+        function initStats() {
+            document.getElementById('totalMembers').textContent = 
+                localStorage.getItem('totalMembers') || '0';
+            document.getElementById('bannedToday').textContent = 
+                actionLogs.filter(log => isToday(new Date(log.timestamp))).length;
+            document.getElementById('activeUsers').textContent = 
+                localStorage.getItem('activeUsers') || '0';
+        }
+
+        // 显示操作记录
+        function renderLogs() {
+            const logContainer = document.getElementById('actionLogs');
+            logContainer.innerHTML = actionLogs.map(log => `
+                <div class="log-entry">
+                    [${new Date(log.timestamp).toLocaleString()}] 
+                    ${log.user} 因 ${log.reason} 被移出
+                </div>
+            `).join('');
+        }
+
+        // 添加测试数据（实际使用时应对接机器人API）
+        function addTestLog(user, reason) {
+            actionLogs.push({
+                timestamp: new Date().toISOString(),
+                user: user,
+                reason: reason
+            });
+            localStorage.setItem('actionLogs', JSON.stringify(actionLogs));
+            renderLogs();
+            initStats();
+        }
+
+        // 清空本地数据
+        function clearLocalData() {
+            if(confirm('确定要清空所有本地记录吗？')) {
+                localStorage.clear();
+                actionLogs = [];
+                initStats();
+                renderLogs();
+            }
+        }
+
+        // 刷新数据
+        function refreshData() {
+            // 这里可以添加API请求逻辑
+            initStats();
+            renderLogs();
+        }
+
+        // 时间判断辅助函数
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() &&
+                   date.getMonth() === today.getMonth() &&
+                   date.getFullYear() === today.getFullYear();
+        }
+
+        // 初始化
+        initStats();
+        renderLogs();
+
+        // 模拟数据 - 实际使用时应删除
+        setTimeout(() => {
+            addTestLog('用户A', '违规发言');
+            addTestLog('用户B', '广告行为');
+        }, 1000);
+    </script>
+</body>
+</html>
