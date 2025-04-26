@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nmBot 控制面板</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="page-container">
+        <div id="home" class="page hidden">
+            <div class="card bg-white shadow-md rounded-lg p-6 mb-6">
+                <h2 class="text-xl font-bold mb-4" data-i18n="robotManagement">🤖 机器人管理</h2>
+                <a href="https://t.me/nm_bot?startgroup=true" class="btn-primary bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded-md flex items-center space-x-2" data-i18n="addToGroup" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                    添加到群组
+                </a>
+            </div>
+
+            <div class="card bg-white shadow-md rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-bold mb-4" data-i18n="dataStatistics">📊 数据统计</h3>
+                <div class="stats-grid grid grid-cols-2 gap-4">
+                    <div class="stat-item">
+                        <div class="stat-value text-2xl font-bold text-blue-500">1.2k</div>
+                        <div class="stat-label text-gray-600" data-i18n="groupCount">群组数量</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value text-2xl font-bold text-green-500">98%</div>
+                        <div class="stat-label text-gray-600" data-i18n="runningStatus">运行状态</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-white shadow-md rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4" data-i18n="commonCommands">📝 常用指令</h3>
+                <pre class="text-gray-700" data-i18n="commandList">/help - 查看帮助<br>/stats - 查看统计数据<br>/settings - 打开设置</pre>
+            </div>
+        </div>
+
+        <div id="settings" class="page hidden">
+            <div class="card bg-white shadow-md rounded-lg p-6 mb-6">
+                <h2 class="text-xl font-bold mb-4" data-i18n="themeSettings">🎨 主题设置</h2>
+                <div class="color-picker flex space-x-4">
+                    <div class="color-option w-8 h-8 rounded-full border-2 border-blue-500" data-color="#2196F3"></div>
+                    <div class="color-option w-8 h-8 rounded-full border-2 border-green-500" data-color="#4CAF50"></div>
+                    <div class="color-option w-8 h-8 rounded-full border-2 border-purple-500" data-color="#9C27B0"></div>
+                    <div class="color-option w-8 h-8 rounded-full border-2 border-orange-500" data-color="#FF9800"></div>
+                </div>
+            </div>
+
+            <div class="card bg-white shadow-md rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4" data-i18n="functionSettings">⚙️ 功能设置</h3>
+                <div class="setting-item flex justify-between items-center mb-4">
+                    <label class="text-gray-700" data-i18n="messageNotification">消息通知</label>
+                    <label class="switch">
+                        <input type="checkbox" id="notifications">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item flex justify-between items-center mb-4">
+                    <label class="text-gray-700" data-i18n="backupFrequency">数据备份频率</label>
+                    <select id="backup-frequency" class="dropdown border border-gray-300 rounded-md px-2 py-1">
+                        <option value="daily" data-i18n="daily">每日</option>
+                        <option value="weekly" data-i18n="weekly">每周</option>
+                        <option value="monthly" data-i18n="monthly">每月</option>
+                    </select>
+                </div>
+
+                <div class="setting-item flex justify-between items-center mb-4">
+                    <label class="text-gray-700" data-i18n="interfaceLanguage">界面语言</label>
+                    <select id="language" class="dropdown border border-gray-300 rounded-md px-2 py-1" onchange="changeLanguage(this)">
+                        <option value="zh-CN">简体中文</option>
+                        <option value="zh-TW">繁体中文</option>
+                        <option value="en">English</option>
+                        <option value="ja">日本語</option>
+                        <option value="ru">Русский</option>
+                    </select>
+                </div>
+
+                <div class="setting-item flex justify-between items-center mb-4">
+                    <label class="text-gray-700" data-i18n="darkMode">暗黑模式</label>
+                    <label class="switch">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <a href="mailto:support@nmteam.com" class="btn-primary bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded-md" data-i18n="feedback" target="_blank">
+                        📩 建议反馈
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="points" class="page hidden">
+            <div class="card bg-white shadow-md rounded-lg p-6 flex justify-between items-center">
+                <div class="points-info">
+                    <p class="text-2xl font-bold text-blue-500" data-i18n="currentPoints">当前积分：<span id="currentPoints">0</span></p>
+                    <p class="text-gray-600" data-i18n="pointsCardNumber">积分卡号：0000 0076 8383 0267</p>
+                </div>
+                <button class="btn-primary bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-2 rounded-md" data-i18n="dailySignIn" onclick="signIn()">🌟 每日签到</button>
+            </div>
+        </div>
+
+        <div id="smart" class="page hidden">
+            <div class="card bg-white shadow-md rounded-lg p-6 text-center">
+                <h2 class="text-xl font-bold mb-4" data-i18n="smartAssistant">🤖 nmBot 智能助理 (Beta)</h2>
+                <p class="text-gray-700 mb-4" data-i18n="smartDesc">帮助您管理群组配置、解答使用问题</p>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input">
+                        <input type="text" id="messageInput" placeholder="输入你的消息">
+                        <button onclick="sendMessage()">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar bg-white shadow-md rounded-md p-4 fixed bottom-0 left-0 right-0 z-10">
+        <div class="nav-items flex justify-around">
+            <button class="nav-item text-blue-500 px-3 py-1 rounded-full" data-i18n="home" onclick="showPage('home')">🏠 首页</button>
+            <button class="nav-item text-blue-500 px-3 py-1 rounded-full" data-i18n="settings" onclick="showPage('settings')">⚙️ 设置</button>
+            <button class="nav-item text-blue-500 px-3 py-1 rounded-full" data-i18n="points" onclick="showPage('points')">🎫 积分</button>
+            <button class="nav-item text-blue-500 px-3 py-1 rounded-full" data-i18n="smart" onclick="showPage('smart')">🤖 智能</button>
+        </div>
+    </nav>
+
+    <div class="about-section flex justify-center items-center mt-8 mb-20">
+        <img src="tp.jpg" alt="Powered By" class="about-logo w-16 h-16">
+        <div class="version-info ml-4">
+            <p class="text-gray-600" data-i18n="miniappVersion">Miniapp 面板版本 25.4.26</p>
+            <p class="text-gray-600" data-i18n="robotVersion">机器人版本 5.1</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>    
